@@ -61,6 +61,13 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 		private static $instance = null;
 
 		/**
+		 * Instance of WPGetAPI_Notices class.
+		 *
+		 * @var WPGetAPI_Notices
+		 */
+		private $notice;
+
+		/**
 		 * Constructor
 		 * @since 0.1.0
 		 */
@@ -101,6 +108,11 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 
 			add_action( 'wp_ajax_wpgetapi_export_endpoints', array( $this, 'export_endpoints' ) );
 			add_action( 'wp_ajax_wpgetapi_import_endpoints', array( $this, 'import_endpoints' ) );
+
+			add_action( 'plugins_loaded', array( $this, 'plugins_loaded_handler' ) );
+			add_action( 'all_admin_notices', array( $this, 'render_admin_notices' ) );
+
+			add_action( 'wp_ajax_wpgetapi_notice_dismiss', array( $this, 'wpgetapi_notice_dismiss_handler' ) );
 		}
 
 		/**
@@ -1160,6 +1172,131 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 				return $this->option_fields();
 			}
 			throw new Exception( 'Invalid property: ' . $field );
+		}
+
+		/**
+		 * Runs when plugins_loaded hook is fired
+		 *
+		 * @return void
+		 */
+		public function plugins_loaded_handler() {
+			//Runs when plugins_loaded action gets fired
+			if ( is_admin() ) {
+				$this->notice = new WPGetAPI_Notices();
+			}
+		}
+
+		/**
+		 * Hook admin notices on admin dashboard page and admin WPGetAPI pages.
+		 *
+		 * @global string $pagenow The filename of the current screen.
+		 *
+		 * @return void
+		 */
+		public function render_admin_notices() {
+			global $pagenow;
+
+			if ( ! WP_Get_API::instance()->current_user_can_manage() ) {
+				return;
+			}
+
+			$installed_at  = $this->notice->get_wpgetapi_plugin_installed_timestamp();
+			$time_now      = $this->notice->get_time_now();
+			$installed_for = $time_now - $installed_at;
+
+			$dismissed_dash_notice_until = get_option( 'wpgetapi_dismiss_dash_notice_until', 0 );
+
+			// If the admin dashboard page or the WPGetAPI page, Then show notice
+			if ( 'index.php' == $pagenow && ( $installed_at && $time_now > $dismissed_dash_notice_until && $installed_for > ( 14 * 86400 ) && ! WP_Get_API::instance()->is_any_premium_addon_plugin_active() ) || ( defined( 'WPGETAPI_FORCE_DASHNOTICE' ) && WPGETAPI_FORCE_DASHNOTICE ) ) {
+				$this->include_template( 'notices/thanks-for-using-main-dash.php' );
+			} elseif ( WP_Get_API::instance()->is_wpgetapi_admin_page() && $installed_at && $installed_for > 14 * 86400 ) {
+				$this->notice->do_notice( false, 'top' );
+			}
+		}
+
+		/**
+		 * Output, or return, the results of running a template (from the 'templates' directory, unless a filter over-rides it).
+		 *
+		 * @param  string      $path                   - path to the template
+		 * @param  bool        $return_instead_of_echo - by default, the template is echo-ed; set this to instead return it
+		 * @param  array       $extract_these          - variables to inject into the template's run context
+		 * @return void|string
+		 */
+		public function include_template( $path, $return_instead_of_echo = false, $extract_these = array() ) {
+			if ( $return_instead_of_echo ) {
+				ob_start();
+			}
+
+			if ( ! isset( $template_file ) ) {
+				$template_file = WPGETAPIDIR . 'templates/' . $path;
+			}
+
+			$template_file = apply_filters( 'wpgetapi_template', $template_file, $path );
+
+			do_action( 'wpgetapi_before_template', $path, $template_file, $return_instead_of_echo, $extract_these );
+
+			if ( ! file_exists( $template_file ) ) {
+				error_log( "WPGetAPI: template not found: $template_file" );
+				echo __( 'Error:', 'wpgetapi' ) . ' ' . __( 'template not found', 'wpgetapi' ) . " ( $template_file )";
+			} else {
+				extract( $extract_these ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- As we are using same function on the other plugins.
+				include $template_file;
+			}
+
+			do_action( 'wpgetapi_after_template', $path, $template_file, $return_instead_of_echo, $extract_these );
+
+			if ( $return_instead_of_echo ) {
+				return ob_get_clean();
+			}
+		}
+
+		/**
+		 * Dismiss notice ajax hadler.
+		 */
+		public function wpgetapi_notice_dismiss_handler() {
+			$nonce = empty( $_POST['nonce'] ) ? '' : $_POST['nonce'];
+
+			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpgetapi-notice-ajax-nonce' ) ) {
+				wp_send_json_error(
+					array(
+						'result'        => false,
+						'error_code'    => 'security_check',
+						'error_message' => __( 'The security check failed; try refreshing the page.', 'wpgetapi' ),
+					)
+				);
+			}
+
+			if ( ! WP_Get_API::instance()->current_user_can_manage() ) {
+				wp_send_json_error(
+					array(
+						'result'        => false,
+						'error_code'    => 'security_check',
+						'error_message' => __( 'You are not allowed to run this command.', 'wpgetapi' ),
+					)
+				);
+			}
+
+			$subaction = $_POST['subaction'];
+			$data      = isset( $_POST['data'] ) ? $_POST['data'] : array();
+			$time_now  = $this->notice->get_time_now();
+
+			if ( in_array( $subaction, array( 'wpgetapi_dismiss_dash_notice_until', 'wpgetapi_dismiss_season' ) ) ) {
+				update_option( $subaction, ( $time_now + 366 * 86400 ) );
+			} elseif ( in_array( $subaction, array( 'wpgetapi_dismiss_page_notice_until', 'wpgetapi_dismiss_notice' ) ) ) {
+				update_option( $subaction, ( $time_now + 84 * 86400 ) );
+			} elseif ( 'wpgetapi_dismiss_review_notice' == $subaction ) {
+				if ( empty( $data['dismiss_forever'] ) ) {
+					update_option( $subaction, $time_now + 84 * 86400 );
+				} else {
+					update_option( $subaction, 100 * ( 365.25 * 86400 ) );
+				}
+			}
+
+			wp_send_json_success(
+				array(
+					'result' => true,
+				)
+			);
 		}
 	}
 

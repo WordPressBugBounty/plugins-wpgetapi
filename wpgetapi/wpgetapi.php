@@ -5,7 +5,7 @@
  * Description: Connect to external API's and display the API data.
  * Author: WPGetAPI
  * Author URI:  https://wpgetapi.com/
- * Version: 2.2.8
+ * Version: 2.2.9
  * Text Domain: wpgetapi
  * License: GPL2 or later
  *
@@ -29,7 +29,7 @@ final class WP_Get_API {
 	 */
 	protected static $_instance = null;
 
-	public $version = '2.2.8';
+	public $version = '2.2.9';
 
 	/**
 	 * Main Instance.
@@ -127,6 +127,8 @@ final class WP_Get_API {
 
 		include_once WPGETAPIDIR . 'frontend/functions.php';
 		include_once WPGETAPIDIR . 'includes/class-wpgetapi-license-handler.php';
+
+		include_once WPGETAPIDIR . 'includes/class-wpgetapi-notices.php';
 	}
 
 	/**
@@ -180,8 +182,30 @@ final class WP_Get_API {
 	public function current_user_can_manage() {
 		return current_user_can( 'manage_options' );
 	}
-}
 
+	/**
+	 * Whether the current user can manage the WPGetAPI plugin admin
+	 *
+	 * @return bool
+	 */
+	public function is_wpgetapi_admin_page() {
+		$is_wpgetapi_admin_page = false;
+		if ( $this->current_user_can_manage() && ( isset( $_GET['page'] ) && strpos( $_GET['page'], 'wpgetapi_' ) !== false ) ) {
+			$is_wpgetapi_admin_page = true;
+		}
+
+		return $is_wpgetapi_admin_page;
+	}
+
+	/**
+	 * Check whether any premium addon plugin is active or not.
+	 *
+	 * @return Boolean True if any premium addon plugin is active otherwise false.
+	 */
+	public function is_any_premium_addon_plugin_active() {
+		return is_plugin_active( 'wpgetapi-extras/wpgetapi-extras.php' ) || is_plugin_active( 'wpgetapi-api-to-posts/wpgetapi-api-to-posts.php' ) || is_plugin_active( 'wpgetapi-oauth/wpgetapi-oauth.php' );
+	}
+}
 
 /**
  * Run the plugin.

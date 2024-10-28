@@ -4,7 +4,7 @@ Tags: api, external api, json, endpoint, rest, woocommerce
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.7
-Stable tag: 2.2.8
+Stable tag: 2.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,6 +188,10 @@ You can create custom posts from API data (sync API to custom posts) using our [
 
 
 == Changelog ==
+
+= 2.2.9 - 28/Oct/2024 =
+
+* TWEAK: Add dismissible admin dashboard welcome notice and rate plugin notice.
 
 = 2.2.8 - 10/Sep/2024 =
 
@@ -522,4 +526,4 @@ You can create custom posts from API data (sync API to custom posts) using our [
 - Initial Release
 
 == Upgrade Notice ==
-* 2.2.8: JQuery 4 compatibility changes and a fix related to changing the API box positions. A recommended update for all.
+* 2.2.9: Various tweaks, like the dismissable admin dashboard notice and rate plugin notice. A recommended update for all.

@@ -26,8 +26,11 @@ class WpGetApi_Api_Enqueues {
 
 	/**
 	 * Enqueue scripts and styles.
+	 *
+	 * @global string $pagenow The filename of the current screen.
 	 */
 	public function admin_scripts_styles( $hook_suffix ) {
+		global $pagenow;
 
 		$v = WPGETAPIVERSION;
 		//$v = time();
@@ -43,6 +46,11 @@ class WpGetApi_Api_Enqueues {
 		}
 
 		wp_enqueue_style( 'wpgetapi-style', WPGETAPIURL . 'assets/css/wpgetapi-admin.css', false, $v );
+
+		if ( 'index.php' == $pagenow || WP_Get_API::instance()->is_wpgetapi_admin_page() ) {
+			$enqueue_version = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? WPGETAPIVERSION . '.' . time() : WPGETAPIVERSION;
+			wp_enqueue_style( 'wpgetapi-admin-notices-css', WPGETAPIURL . 'assets/css/wpgetapi-notices.css', array(), $enqueue_version );
+		}
 	}
 
 	/**

@@ -119,7 +119,7 @@ class WpGetApi_Encryption {
 		}
 
 		// If this is reached, you're either not on a live site or have a serious security issue.
-		return 'das-ist-kein-geheimer-schluessel';
+		return 'das-ist-kein-geheimer-schluessel'; // spellchecker:ignore
 	}
 
 	/**
@@ -139,6 +139,6 @@ class WpGetApi_Encryption {
 		}
 
 		// If this is reached, you're either not on a live site or have a serious security issue.
-		return 'das-ist-kein-geheimes-salz';
+		return 'das-ist-kein-geheimes-salz'; // spellchecker:ignore
 	}
 }

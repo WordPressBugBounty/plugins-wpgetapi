@@ -5,7 +5,7 @@
  * Description: Connect to external API's and display the API data.
  * Author: WPGetAPI
  * Author URI:  https://wpgetapi.com/
- * Version: 2.2.9
+ * Version: 2.2.10
  * Text Domain: wpgetapi
  * License: GPL2 or later
  *
@@ -29,7 +29,7 @@ final class WP_Get_API {
 	 */
 	protected static $_instance = null;
 
-	public $version = '2.2.9';
+	public $version = '2.2.10';
 
 	/**
 	 * Main Instance.

@@ -26,9 +26,9 @@ class WpGetApi_Api {
 	public $method             = 'GET'; // the endpoint method GET POST etc
 	public $cache_time         = ''; // the time to cache
 	public $endpoint           = ''; // the endpoint that we will get
-	public $query_parameters   = ''; // the query paramaters appended to url
-	public $header_parameters  = ''; // the header paramaters
-	public $body_parameters    = ''; // the body paramaters
+	public $query_parameters   = ''; // the query parameters appended to url
+	public $header_parameters  = ''; // the header parameters
+	public $body_parameters    = ''; // the body parameters
 	public $body_json_encode   = ''; // body_json_encode body
 	public $body_url_encode    = ''; // urlencode body
 	public $body_base64_encode = ''; // base64 encode body
@@ -314,7 +314,7 @@ class WpGetApi_Api {
 			$this
 		);
 
-		// if doing POST request, include body paramters
+		// if doing POST request, include body parameters
 		if ( $this->method == 'POST' || $this->method == 'PUT' || $this->method == 'DELETE' || $this->method == 'PATCH' ) {
 
 			// tokens are sent through here
@@ -372,14 +372,14 @@ class WpGetApi_Api {
 			}
 		}
 
-		// get our body paramters as they are formatted
+		// get our body parameters as they are formatted
 		// this won't change anything, it just allows us to get the parameters
 		$this->body_parameters = apply_filters( 'wpgetapi_final_body_parameters', $this->body_parameters, $this );
 
 		// add headers to our final request args
 		$this->final_request_args = wp_parse_args( $headers, $this->final_request_args );
 
-		// build the args taht are sent to the request
+		// build the args that are sent to the request
 		$default_args = apply_filters(
 			'wpgetapi_default_request_args_parameters',
 			array(

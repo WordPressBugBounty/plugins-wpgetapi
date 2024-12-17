@@ -574,7 +574,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 					<!-- End of Nav Tabs -->
 
 						<?php
-						//render all tab forms (normaly just 1 form)
+						//render all tab forms (normally just 1 form)
 						foreach ( $tab_forms as $tab_form ) :
 							?>
 					
@@ -1135,7 +1135,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 
 
 		/**
-		 * Tabs don't immmediately appear on save, so this hack!
+		 * Tabs don't immediately appear on save, so this hack!
 		 * @since  0.1.0
 		 */
 		public function redirect( $object_id, $updated ) {

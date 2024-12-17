@@ -4,7 +4,7 @@ Tags: api, external api, json, endpoint, rest, woocommerce
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.7
-Stable tag: 2.2.9
+Stable tag: 2.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -189,6 +189,10 @@ You can create custom posts from API data (sync API to custom posts) using our [
 
 == Changelog ==
 
+= 2.2.10 - 17/Dec/2024 =
+
+* FIX: Clear Test Endpoint results when adding a new endpoint.
+
 = 2.2.9 - 28/Oct/2024 =
 
 * TWEAK: Add dismissible admin dashboard welcome notice and rate plugin notice.
@@ -310,11 +314,11 @@ You can create custom posts from API data (sync API to custom posts) using our [
 
 = 1.9.5 (2023-06-30) =
 - New - add PATCH request method.
-- Udpate - allow BODY post fields with any request method.
+- Update - allow BODY post fields with any request method.
 
 = 1.9.4 (2023-06-22) =
 - New - styling changes in admin. Remove input descriptions and replace with tooltips.
-- Udpate - expand the info in many tooltips.
+- Update - expand the info in many tooltips.
 
 = 1.9.3 (2023-06-22) =
 - New - add success and error messages when using the 'Test Endpoint' button in the admin.
@@ -358,7 +362,7 @@ You can create custom posts from API data (sync API to custom posts) using our [
 
 = 1.8.5 (2023-03-16) =
 - New - Add new format='no_display' shortcode attribute to stop any output from the API.
-- New - Add new integration with chaining methods that can be used in conjuction with the PRO plugin.
+- New - Add new integration with chaining methods that can be used in conjunction with the PRO plugin.
 
 = 1.8.4 (2023-03-01) =
 - New - Add new integration with image attributes for the shortcode, to allow the display of images using the PRO plugin.
@@ -393,8 +397,8 @@ You can create custom posts from API data (sync API to custom posts) using our [
 - New - add new licensing and updating methods.
 
 = 1.7.7 (2023-01-10) =
-- New - add ability to set float and integers within paramater settings using float(number) and integer(number) syntax.
-- Fix - fix help link for Body paramters going to wrong page.
+- New - add ability to set float and integers within parameter settings using float(number) and integer(number) syntax.
+- Fix - fix help link for Body parameters going to wrong page.
 
 = 1.7.6 (2023-01-09) =
 - Fix - fix error with DELETE not working.
@@ -476,7 +480,7 @@ You can create custom posts from API data (sync API to custom posts) using our [
 - Enhancement - readme updates and plugin links within plugin page.
 
 = 1.4.1 (2022-05-05) =
-- Fix - new tab was not appearing on intitial save on setup page.
+- Fix - new tab was not appearing on parameters save on setup page.
 - Enhancement - add new filter 'wpgetapi_admin_pages' to allow adding extra tabs.
 
 = 1.4.0 (2022-03-17) =
@@ -526,4 +530,4 @@ You can create custom posts from API data (sync API to custom posts) using our [
 - Initial Release
 
 == Upgrade Notice ==
-* 2.2.9: Various tweaks, like the dismissable admin dashboard notice and rate plugin notice. A recommended update for all.
+* 2.2.10: A fix that includes test results of the previous endpoint when adding second and onward endpoints to the API. A recommended update for all.

@@ -102,6 +102,9 @@ window.WpGetApi = window.WpGetApi || {};
 			if ( e.type == 'cmb2_add_row' ) {
 				$group = $( '.cmb-repeatable-grouping' ).last();
 				$group.find( '.functions .endpoint_id' ).html( '' );
+				$group.find( '.wpgetapi-test-area' ).attr( 'data-endpoint', '' );
+				$group.find( '.wpgetapi-test-area .handle' ).hide();
+				$group.find( '.wpgetapi-test-area .wpgetapi-result' ).html( '' );
 			}
 
 			// Append the duplicate button inside each .cmbhandle-title element when remove endpoint

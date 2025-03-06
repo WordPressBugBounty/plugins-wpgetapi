@@ -9,6 +9,8 @@
  * @link      https://cmb2.io
  */
 
+/* phpcs:ignoreFile */
+
 /**
  * Helper function to provide directory path to CMB2
  *

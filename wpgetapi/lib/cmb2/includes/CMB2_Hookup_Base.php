@@ -13,6 +13,9 @@
  * @property-read string $object_type
  * @property-read CMB2   $cmb
  */
+
+/* phpcs:ignoreFile */
+
 abstract class CMB2_Hookup_Base {
 
 	/**

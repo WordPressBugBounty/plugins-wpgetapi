@@ -5,7 +5,7 @@
  * Description: Connect to external API's and display the API data.
  * Author: WPGetAPI
  * Author URI:  https://wpgetapi.com/
- * Version: 2.2.10
+ * Version: 2.25.1
  * Text Domain: wpgetapi
  * License: GPL2 or later
  *
@@ -29,7 +29,7 @@ final class WP_Get_API {
 	 */
 	protected static $_instance = null;
 
-	public $version = '2.2.10';
+	public $version = '2.25.1';
 
 	/**
 	 * Main Instance.
@@ -49,7 +49,7 @@ final class WP_Get_API {
 	 * @return void
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wpgetapi' ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'wpgetapi' ), esc_html( $this->version ) );
 	}
 
 	/**
@@ -57,7 +57,7 @@ final class WP_Get_API {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wpgetapi' ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'wpgetapi' ), esc_html( $this->version ) );
 	}
 
 	/**
@@ -112,7 +112,7 @@ final class WP_Get_API {
 	 */
 	public function includes() {
 
-		if ( isset( $_GET['page'] ) && strpos( $_GET['page'], 'wpgetapi_' ) !== false ) {
+		if ( isset( $_GET['page'] ) && strpos( sanitize_text_field( wp_unslash( $_GET['page'] ) ), 'wpgetapi_' ) !== false ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- We are not processing form submission.
 			require_once WPGETAPIDIR . '/lib/cmb2/init.php';
 		}
 
@@ -190,7 +190,7 @@ final class WP_Get_API {
 	 */
 	public function is_wpgetapi_admin_page() {
 		$is_wpgetapi_admin_page = false;
-		if ( $this->current_user_can_manage() && ( isset( $_GET['page'] ) && strpos( $_GET['page'], 'wpgetapi_' ) !== false ) ) {
+		if ( $this->current_user_can_manage() && ( isset( $_GET['page'] ) && strpos( sanitize_text_field( wp_unslash( $_GET['page'] ) ), 'wpgetapi_' ) !== false ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- We are not processing form submission.
 			$is_wpgetapi_admin_page = true;
 		}
 

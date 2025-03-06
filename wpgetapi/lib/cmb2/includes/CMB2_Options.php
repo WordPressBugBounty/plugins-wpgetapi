@@ -9,6 +9,8 @@
  * @link      https://cmb2.io
  */
 
+/* phpcs:ignoreFile */
+
 /**
  * Retrieves an instance of CMB2_Option based on the option key
  *

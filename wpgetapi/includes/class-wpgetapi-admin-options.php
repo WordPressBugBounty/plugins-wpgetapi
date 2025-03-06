@@ -345,7 +345,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 
 					array(
 						'name'       => __( 'Timeout', 'wpgetapi' ) .
-							'<span class="dashicons dashicons-editor-help" data-tip="' . esc_attr__( 'How long the connection should stay open in seconds.', 'wpgetapi' ) . ' ' . esc_attr__( 'Default is 10.', 'wpgetapi' ) . ' ' . esc_attr__( 'If you receive curl 28 errors, try increasing this value.' ) . '"></span>',
+							'<span class="dashicons dashicons-editor-help" data-tip="' . esc_attr__( 'How long the connection should stay open in seconds.', 'wpgetapi' ) . ' ' . esc_attr__( 'Default is 10.', 'wpgetapi' ) . ' ' . esc_attr__( 'If you receive curl 28 errors, try increasing this value.', 'wpgetapi' ) . '"></span>',
 						'id'         => 'timeout',
 						'type'       => 'text',
 						'default'    => '10',
@@ -451,24 +451,24 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 						'classes' => 'field-actions',
 						'desc'    => __( 'Available in PRO plugin.', 'wpgetapi' ),
 						'options' => array(
-							''                        => __( '-- No Action --', 'wpgetapi-extras' ),
-							'new_post_published'      => __( 'Post/Custom Post - New Post Published', 'wpgetapi-extras' ),
-							'transition_post_status'  => __( 'Post/Custom Post - Status Changed', 'wpgetapi-extras' ),
-							'delete_post'             => __( 'Post/Custom Post - Delete Post', 'wpgetapi-extras' ),
+							''                        => __( '-- No Action --', 'wpgetapi' ),
+							'new_post_published'      => __( 'Post/Custom Post - New Post Published', 'wpgetapi' ),
+							'transition_post_status'  => __( 'Post/Custom Post - Status Changed', 'wpgetapi' ),
+							'delete_post'             => __( 'Post/Custom Post - Delete Post', 'wpgetapi' ),
 
-							'user_register'           => __( 'User - New User Registered', 'wpgetapi-extras' ),
-							'delete_user'             => __( 'User - Delete User', 'wpgetapi-extras' ),
-							'user_login'              => __( 'User - User Logs In', 'wpgetapi-extras' ),
-							'woocommerce_new_product' => __( 'WooCommerce - New Product Created', 'wpgetapi-extras' ),
-							'woocommerce_new_order'   => __( 'WooCommerce - New Order Created', 'wpgetapi-extras' ),
-							'woocommerce_order_status_changed' => __( 'WooCommerce - Order Status Changed', 'wpgetapi-extras' ),
-							'contact_form_7'          => __( 'Contact Form 7', 'wpgetapi-extras' ),
-							'gravity_forms'           => __( 'Gravity Forms', 'wpgetapi-extras' ),
-							'wpforms'                 => __( 'WPForms', 'wpgetapi-extras' ),
-							'jetformbuilder'          => __( 'JetFormBuilder', 'wpgetapi-extras' ),
-							'formidable_forms'        => __( 'Formidable Forms', 'wpgetapi-extras' ),
-							'pmp'                     => __( 'Paid Memberships Pro - After Checkout', 'wpgetapi-extras' ),
-							'edd'                     => __( 'Easy Digital Downloads - Complete Purchase', 'wpgetapi-extras' ),
+							'user_register'           => __( 'User - New User Registered', 'wpgetapi' ),
+							'delete_user'             => __( 'User - Delete User', 'wpgetapi' ),
+							'user_login'              => __( 'User - User Logs In', 'wpgetapi' ),
+							'woocommerce_new_product' => __( 'WooCommerce - New Product Created', 'wpgetapi' ),
+							'woocommerce_new_order'   => __( 'WooCommerce - New Order Created', 'wpgetapi' ),
+							'woocommerce_order_status_changed' => __( 'WooCommerce - Order Status Changed', 'wpgetapi' ),
+							'contact_form_7'          => __( 'Contact Form 7', 'wpgetapi' ),
+							'gravity_forms'           => __( 'Gravity Forms', 'wpgetapi' ),
+							'wpforms'                 => __( 'WPForms', 'wpgetapi' ),
+							'jetformbuilder'          => __( 'JetFormBuilder', 'wpgetapi' ),
+							'formidable_forms'        => __( 'Formidable Forms', 'wpgetapi' ),
+							'pmp'                     => __( 'Paid Memberships Pro - After Checkout', 'wpgetapi' ),
+							'edd'                     => __( 'Easy Digital Downloads - Complete Purchase', 'wpgetapi' ),
 						),
 						'default' => '',
 					),
@@ -549,7 +549,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 			<div class="main_content_cell">
 
 				<h1 class="wp-heading-inline">
-					<img width="24" height="22" src="<?php echo esc_url( WPGETAPIURL . 'assets/img/wpgetapi-icon.png' ); ?>" /> <?php echo esc_html( $this->title ); ?> <span class="vnum"><?php echo WPGETAPIVERSION; ?></span>
+					<img width="24" height="22" src="<?php echo esc_url( WPGETAPIURL . 'assets/img/wpgetapi-icon.png' ); ?>" /> <?php echo esc_html( $this->title ); ?> <span class="vnum"><?php echo esc_html( WPGETAPIVERSION ); ?></span>
 				</h1>
 
 				<div class="outer-box">
@@ -560,7 +560,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 
 							$tab_slug  = $option_tab['id'];
 							$nav_class = 'nav-tab';
-							if ( $tab_slug == $_GET['page'] ) {
+							if ( isset( $_GET['page'] ) && $tab_slug == $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- We are not processing form submission.
 								$nav_class  .= ' nav-tab-active'; //add active class to current tab
 								$tab_forms[] = $option_tab; //add current tab to forms to be rendered
 							}
@@ -583,7 +583,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 
 								<div id="my-content-id" style="display:none;">
 									<div>
-												<?php echo $this->get_import_export(); ?>
+												<?php echo $this->get_import_export(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Ignored since the data is printed form and input html content. ?>
 									</div>
 								</div>
 
@@ -605,7 +605,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 				
 					<?php
 					$sidebar = self::sidebar_display();
-					echo apply_filters( 'wpgetapi_admin_sidebar_display', $sidebar );
+					echo apply_filters( 'wpgetapi_admin_sidebar_display', $sidebar ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Ignored since the data is printed mixed html content.
 					?>
 
 			</div>
@@ -623,20 +623,20 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 		 */
 		public function test_the_endpoint() {
 
-			$nonce = empty( $_POST['nonce'] ) ? '' : $_POST['nonce'];
+			$nonce = empty( $_POST['nonce'] ) ? '' : sanitize_text_field( wp_unslash( $_POST['nonce'] ) );
 			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpgetapi_test_endpoint_nonce' ) || ! WP_Get_API::instance()->current_user_can_manage() ) {
 				die( 'Security check' );
 			}
 
-			$api_id      = sanitize_text_field( $_POST['api_id'] );
-			$endpoint_id = sanitize_text_field( $_POST['endpoint_id'] );
+			$api_id      = isset( $_POST['api_id'] ) ? sanitize_text_field( wp_unslash( $_POST['api_id'] ) ) : '';
+			$endpoint_id = isset( $_POST['endpoint_id'] ) ? sanitize_text_field( wp_unslash( $_POST['endpoint_id'] ) ) : '';
 			$data        = wpgetapi_endpoint( $api_id, $endpoint_id, array( 'test_endpoint' => true ) );
 
 			$output = array(
 				'data'        => $data,
 				'endpoint_id' => $endpoint_id,
 			);
-			echo json_encode( $output );
+			echo wp_json_encode( $output );
 
 			wp_die(); // this is required to terminate immediately and return a proper response
 		}
@@ -671,12 +671,12 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 		 *
 		 */
 		public function export_endpoints() {
-			$nonce = empty( $_POST['nonce'] ) ? '' : $_POST['nonce'];
+			$nonce = empty( $_POST['nonce'] ) ? '' : sanitize_text_field( wp_unslash( $_POST['nonce'] ) );
 			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpgetapi_export_endpoints_nonce' ) || ! WP_Get_API::instance()->current_user_can_manage() ) {
 				die( 'Security check' );
 			}
 
-			$api_id = sanitize_text_field( $_POST['api_id'] );
+			$api_id = ! empty( $_POST['api_id'] ) ? sanitize_text_field( wp_unslash( $_POST['api_id'] ) ) : '';
 			$data   = get_option( $api_id );
 
 			if ( ! isset( $data['endpoints'] ) ) {
@@ -709,7 +709,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 				}
 			}
 
-			echo json_encode( $data );
+			echo wp_json_encode( $data );
 			wp_die(); // this is required to terminate immediately and return a proper response
 		}
 
@@ -718,13 +718,13 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 		 *
 		 */
 		public function import_endpoints() {
-			$nonce = empty( $_POST['nonce'] ) ? '' : $_POST['nonce'];
+			$nonce = empty( $_POST['nonce'] ) ? '' : sanitize_text_field( wp_unslash( $_POST['nonce'] ) );
 			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'import_endpoint_nonce' ) || ! WP_Get_API::instance()->current_user_can_manage() ) {
 				die( 'Security check' );
 			}
 
-			$api_id        = sanitize_text_field( $_POST['api_id'] );
-			$textarea      = sanitize_textarea_field( $_POST['textarea'] );
+			$api_id        = ! empty( $_POST['api_id'] ) ? sanitize_text_field( wp_unslash( $_POST['api_id'] ) ) : '';
+			$textarea      = ! empty( $_POST['textarea'] ) ? sanitize_textarea_field( wp_unslash( $_POST['textarea'] ) ) : '';
 			$existing_data = get_option( $api_id );
 
 			if ( ! $textarea ) {
@@ -830,7 +830,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 					var data = {
 						'action': 'wpgetapi_export_endpoints',
 						'api_id': api_id,
-						'nonce': '<?php echo wp_create_nonce( 'wpgetapi_export_endpoints_nonce' ); ?>'
+						'nonce': '<?php echo esc_js( wp_create_nonce( 'wpgetapi_export_endpoints_nonce' ) ); ?>'
 					};
 
 					// send and get response
@@ -860,7 +860,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 						'action': 'wpgetapi_import_endpoints',
 						'textarea': textarea,
 						'api_id': api_id,
-						'nonce': "<?php echo wp_create_nonce( 'import_endpoint_nonce' ); ?>",
+						'nonce': "<?php echo esc_js( wp_create_nonce( 'import_endpoint_nonce' ) ); ?>",
 					};
 
 					// send and get response
@@ -884,7 +884,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 				 * Run the endpoint test
 				 * 
 				 */
-				$('body').on( 'click', '.wpgetapi .test-endpoint-button', function(){//delegated
+				$('body').on( 'click', '.wpgetapi .test-endpoint-button', function(){ //delegated
 
 					var $this = $(this);
 					var $parent = $this.closest( '.cmb-repeatable-grouping' );
@@ -899,7 +899,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 						'action': 'wpgetapi_test_endpoint',
 						'api_id': api_id,
 						'endpoint_id': endpoint_id,
-						'nonce': '<?php echo wp_create_nonce( 'wpgetapi_test_endpoint_nonce' ); ?>'
+						'nonce': '<?php echo esc_js( wp_create_nonce( 'wpgetapi_test_endpoint_nonce' ) ); ?>'
 					};
 
 					// send and get response
@@ -1006,7 +1006,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 				});
 
 				$( '.wpgetapi-test-area .handle' ).on('click', function() {
-					$('.wpgetapi-result').toggle();
+					$( this ).closest( '.cmb-repeatable-grouping' ).find( '.wpgetapi-result' ).toggle();
 				});
 
 			});
@@ -1027,7 +1027,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 			ob_start();
 
 			// do our setup page
-			if ( isset( $_GET['page'] ) && $_GET['page'] === 'wpgetapi_setup' ) {
+			if ( isset( $_GET['page'] ) && $_GET['page'] === 'wpgetapi_setup' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- We are not processing form submission.
 				return $this->sidebar_setup_page();
 			}
 
@@ -1036,17 +1036,17 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 			<div class="box">
 				<h4><?php esc_html_e( 'Endpoint Instructions', 'wpgetapi' ); ?></h4>
 				<ol>
-					<li><?php _e( 'Give your endpoint a <b>Unique ID</b>', 'wpgetapi' ); ?></li>
-					<li><?php _e( 'Add the <b>Endpoint</b> which can be found in your API docs', 'wpgetapi' ); ?></li>
-					<li><?php _e( 'Set the <b>Method</b> - GET for getting data & POST for sending data to the API', 'wpgetapi' ); ?></li>
-					<li><?php _e( 'Set the desired <b>Results Format</b>', 'wpgetapi' ); ?></li>
-					<li><?php esc_html_e( 'Other fields are optional & will depend on your API', 'wpgetapi' ); ?></li>
+					<li><?php echo wp_kses( __( 'Give your endpoint a <b>Unique ID</b>', 'wpgetapi' ), array( 'b' => array() ) ); ?></li>
+					<li><?php echo wp_kses( __( 'Add the <b>Endpoint</b> which can be found in your API docs', 'wpgetapi' ), array( 'b' => array() ) ); ?></li>
+					<li><?php echo wp_kses( __( 'Set the <b>Method</b> - GET for getting data & POST for sending data to the API', 'wpgetapi' ), array( 'b' => array() ) ); ?></li>
+					<li><?php echo wp_kses( __( 'Set the desired <b>Results Format</b>', 'wpgetapi' ), array( 'b' => array() ) ); ?></li>
+					<li><?php esc_html_e( 'Other fields are optional &amp; will depend on your API', 'wpgetapi' ); ?></li>
 					<li><?php esc_html_e( 'Hit the Save button', 'wpgetapi' ); ?></li>
 					<li><?php esc_html_e( 'Copy the Template Tag or Shortcode & paste into page, post or theme file', 'wpgetapi' ); ?></li>
 				</ol>
 			</div>
 			  
-			<?php echo $this->help_box(); ?>
+			<?php echo $this->help_box(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Ignored since the data is printed mixed html content. ?>
 
 			<?php
 			$content = ob_get_contents();
@@ -1067,11 +1067,11 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 			<div class="box">
 				<h4><?php esc_html_e( 'Setup Instructions', 'wpgetapi' ); ?></h4>
 				<ol>
-					<li><?php _e( 'Name your API in the <b>API Name</b> field', 'wpgetapi' ); ?></li>
-					<li><?php _e( 'Give your API a <b>Unique ID</b>', 'wpgetapi' ); ?></li>
+					<li><?php echo wp_kses( __( 'Name your API in the <b>API Name</b> field', 'wpgetapi' ), array( 'b' => array() ) ); ?></li>
+					<li><?php echo wp_kses( __( 'Give your API a <b>Unique ID</b>', 'wpgetapi' ), array( 'b' => array() ) ); ?></li>
 					<li>
 					<?php
-					_e( 'Add the <b>Base URL</b> of your API.', 'wpgetapi' );
+					echo wp_kses( __( 'Add the <b>Base URL</b> of your API.', 'wpgetapi' ), array( 'b' => array() ) );
 					echo ' ';
 					esc_html_e( 'This can be found in the docs of your API', 'wpgetapi' );
 					?>
@@ -1081,7 +1081,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 				</ol>
 			</div>
 			
-			<?php echo $this->help_box(); ?>
+			<?php echo $this->help_box(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Ignored since the data is printed mixed html content. ?>
 
 			<?php
 			$content = ob_get_contents();
@@ -1106,7 +1106,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 					<?php
 					printf(
 						/* translators: 1. Quick start guide page link */
-						esc_html__( 'View the %1$s', 'cmb2' ),
+						esc_html__( 'View the %1$s', 'wpgetapi' ),
 						'<a target="_blank" href="https://wpgetapi.com/docs/quick-start-guide/?utm_campaign=Docs&utm_medium=Admin&utm_source=User">Quick Start Guide</a>'
 					);
 					?>
@@ -1115,14 +1115,14 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 					<?php
 					printf(
 						/* translators: 1. FAQ page link */
-						esc_html__( 'View the %1$s', 'cmb2' ),
+						esc_html__( 'View the %1$s', 'wpgetapi' ),
 						'<a target="_blank" href="https://wpgetapi.com/docs/frequently-asked-questions/?utm_campaign=Docs&utm_medium=Admin&utm_source=User">FAQs</a>'
 					);
 					?>
 					</li>
 
 						<?php if ( ! $this->pro_plugin ) { ?>
-					<a class="button" target="_blank" href="https://wpgetapi.com/downloads/pro-plugin/?utm_campaign=Pro&utm_medium=Admin&utm_source=User"><?php esc_html_e( 'Do more with the PRO Plugin', 'cmb2' ); ?></a>
+					<a class="button" target="_blank" href="https://wpgetapi.com/downloads/pro-plugin/?utm_campaign=Pro&utm_medium=Admin&utm_source=User"><?php esc_html_e( 'Do more with the PRO Plugin', 'wpgetapi' ); ?></a>
 					<?php } ?>
 				</ul>  
 			</div>
@@ -1171,7 +1171,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 			if ( 'option_metabox' === $field ) {
 				return $this->option_fields();
 			}
-			throw new Exception( 'Invalid property: ' . $field );
+			throw new Exception( esc_html__( 'Invalid property:', 'wpgetapi' ) . ' ' . esc_html( $field ) );
 		}
 
 		/**
@@ -1236,8 +1236,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 			do_action( 'wpgetapi_before_template', $path, $template_file, $return_instead_of_echo, $extract_these );
 
 			if ( ! file_exists( $template_file ) ) {
-				error_log( "WPGetAPI: template not found: $template_file" );
-				echo __( 'Error:', 'wpgetapi' ) . ' ' . __( 'template not found', 'wpgetapi' ) . " ( $template_file )";
+				echo esc_html__( 'Error:', 'wpgetapi' ) . ' ' . esc_html__( 'template not found', 'wpgetapi' ) . ' ( ' . esc_html( $template_file ) . ' )';
 			} else {
 				extract( $extract_these ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- As we are using same function on the other plugins.
 				include $template_file;
@@ -1254,7 +1253,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 		 * Dismiss notice ajax hadler.
 		 */
 		public function wpgetapi_notice_dismiss_handler() {
-			$nonce = empty( $_POST['nonce'] ) ? '' : $_POST['nonce'];
+			$nonce = empty( $_POST['nonce'] ) ? '' : sanitize_text_field( wp_unslash( $_POST['nonce'] ) );
 
 			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpgetapi-notice-ajax-nonce' ) ) {
 				wp_send_json_error(
@@ -1276,8 +1275,8 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 				);
 			}
 
-			$subaction = $_POST['subaction'];
-			$data      = isset( $_POST['data'] ) ? $_POST['data'] : array();
+			$subaction = isset( $_POST['subaction'] ) ? sanitize_text_field( wp_unslash( $_POST['subaction'] ) ) : '';
+			$data      = isset( $_POST['data'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['data'] ) ) : array();
 			$time_now  = $this->notice->get_time_now();
 
 			if ( in_array( $subaction, array( 'wpgetapi_dismiss_dash_notice_until', 'wpgetapi_dismiss_season' ) ) ) {

@@ -16,6 +16,9 @@
  * @property-read rest_read   Whether CMB2 object is readable via the rest api.
  * @property-read rest_edit   Whether CMB2 object is editable via the rest api.
  */
+
+/* phpcs:ignoreFile */
+
 class CMB2_REST extends CMB2_Hookup_Base {
 
 	/**

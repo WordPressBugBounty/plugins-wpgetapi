@@ -11,6 +11,8 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
+/* phpcs:ignoreFile */
+
 class CMB2_Hookup extends CMB2_Hookup_Base {
 
 	/**

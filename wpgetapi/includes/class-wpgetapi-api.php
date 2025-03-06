@@ -236,11 +236,12 @@ class WpGetApi_Api {
 
 		// wp error
 		if ( is_wp_error( $this->response ) ) {
-			return apply_filters( 'wpgetapi_raw_error_data', json_encode( $this->response ), $this );
+			return apply_filters( 'wpgetapi_raw_error_data', wp_json_encode( $this->response ), $this );
 		}
 
-		// get response_code
+		// get and set response_code
 		$this->response_code = wp_remote_retrieve_response_code( $this->response );
+		wpgetapi_set_api_last_response_code( $this->api_id, $this->endpoint_id, $this->response_code );
 
 		// action to intercept call depending on response_code
 		$this->response = apply_filters( 'wpgetapi_before_retrieve_body', $this->response, $this->response_code, $this );
@@ -322,7 +323,7 @@ class WpGetApi_Api {
 
 			// do we json_encode the entire body
 			if ( $this->body_json_encode == true ) {
-				$this->body_parameters = json_encode( $this->body_parameters );
+				$this->body_parameters = wp_json_encode( $this->body_parameters );
 			}
 
 			// do we urlencode the entire body
@@ -359,7 +360,7 @@ class WpGetApi_Api {
 			// do we base64 encode the entire body
 			if ( $this->body_parameters && $this->body_base64_encode == true ) {
 
-				$this->body_parameters = is_array( $this->body_parameters ) ? json_encode( $this->body_parameters ) : $this->body_parameters;
+				$this->body_parameters = is_array( $this->body_parameters ) ? wp_json_encode( $this->body_parameters ) : $this->body_parameters;
 				$this->body_parameters = base64_encode( $this->body_parameters );
 
 			}
@@ -383,11 +384,12 @@ class WpGetApi_Api {
 		$default_args = apply_filters(
 			'wpgetapi_default_request_args_parameters',
 			array(
-				'timeout'     => ( absint( $this->timeout ) > 0 ? absint( $this->timeout ) : 10 ),
-				'sslverify'   => $this->sslverify,
-				'redirection' => 5,
-				'blocking'    => true,
-				'cookies'     => array(),
+				'timeout'            => ( absint( $this->timeout ) > 0 ? absint( $this->timeout ) : 10 ),
+				'sslverify'          => $this->sslverify,
+				'redirection'        => 5,
+				'blocking'           => true,
+				'cookies'            => array(),
+				'reject_unsafe_urls' => defined( 'WPGETAPI_REJECT_UNSAFE_URL' ) ? WPGETAPI_REJECT_UNSAFE_URL : false,
 			)
 		);
 
@@ -407,7 +409,7 @@ class WpGetApi_Api {
 		$response = apply_filters( 'wpgetapi_before_get_request', $response, $this );
 
 		if ( empty( $response ) ) {
-			$response = wp_remote_get( $this->final_url, $this->final_request_args );
+			$response = wp_remote_get( sanitize_url( $this->final_url ), $this->final_request_args );
 		}
 
 		return $response;
@@ -425,7 +427,7 @@ class WpGetApi_Api {
 		//$this->final_request_args['method'] = 'POST';
 
 		if ( empty( $response ) ) {
-			$response = wp_remote_post( $this->final_url, $this->final_request_args );
+			$response = wp_remote_post( sanitize_url( $this->final_url ), $this->final_request_args );
 		}
 
 		return $response;
@@ -436,7 +438,7 @@ class WpGetApi_Api {
 	 */
 	public function PUT_request() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- Ignore not snake case format because it's used in the other premium plugins.
 		$this->final_request_args['method'] = 'PUT';
-		$response                           = wp_remote_request( $this->final_url, $this->final_request_args );
+		$response                           = wp_remote_request( sanitize_url( $this->final_url ), $this->final_request_args );
 		return $response;
 	}
 
@@ -445,7 +447,7 @@ class WpGetApi_Api {
 	 */
 	public function PATCH_request() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- Ignore not snake case format because it's used in the premium plugins.
 		$this->final_request_args['method'] = 'PATCH';
-		$response                           = wp_remote_request( $this->final_url, $this->final_request_args );
+		$response                           = wp_remote_request( sanitize_url( $this->final_url ), $this->final_request_args );
 		return $response;
 	}
 
@@ -454,7 +456,7 @@ class WpGetApi_Api {
 	 */
 	public function DELETE_request() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- Ignore not snake case format because it's used in the premium plugins.
 		$this->final_request_args['method'] = 'DELETE';
-		$response                           = wp_remote_request( $this->final_url, $this->final_request_args );
+		$response                           = wp_remote_request( sanitize_url( $this->final_url ), $this->final_request_args );
 		return $response;
 	}
 
@@ -479,7 +481,7 @@ class WpGetApi_Api {
 		$data = apply_filters( 'wpgetapi_json_response_body', $data, $this->keys );
 
 		if ( $this->results_format == 'json_string' ) {
-			return trim( json_encode( $data, JSON_PRETTY_PRINT ), '"' );
+			return trim( wp_json_encode( $data, JSON_PRETTY_PRINT ), '"' );
 		}
 
 		if ( $this->results_format == 'json_decoded' ) {
@@ -758,8 +760,8 @@ class WpGetApi_Api {
 
 					<div class="debug-item status">
 						<div class="">
-							<h5><?php echo $status['type']; ?> <?php echo esc_html( $status['title'] ); ?></h5>
-							<span class="desc"><?php echo $status['desc']; ?></span>
+							<h5><?php echo wp_kses( $status['type'], array( 'span' => array( 'class' => array() ) ) ); ?> <?php echo esc_html( $status['title'] ); ?></h5>
+							<span class="desc"><?php echo wp_kses( $status['desc'], array( 'a' => array() ) ); ?></span>
 						</div>
 					</div>
 					<div class="debug-item">    

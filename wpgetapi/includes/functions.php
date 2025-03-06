@@ -6,7 +6,7 @@
 if ( ! function_exists( 'wpgetapi_pp' ) ) {
 	function wpgetapi_pp( $array_data ) {
 		echo '<pre style="white-space:pre-wrap;">';
-			print_r( $array_data );
+			print_r( $array_data ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r -- Debug output.
 		echo '</pre>' . "\n";
 	}
 }
@@ -77,8 +77,8 @@ function wpgetapi_output_top_of_endpoint( $field_args, $field ) {
 	?>
 
 	<pre class="functions">
-		<div class="wrapper"><div>Template Tag:</div> <span class="wpgetapi-template-tag wpgetapi-copy">wpgetapi_endpoint( '<?php echo esc_html( $field->args['api_id'] ); ?>', '<span class='endpoint_id'></span>', array( 'debug' => false ) );</span> <?php echo $copy_template_tag_html; ?></div>
-		<div class="wrapper"><div>Shortcode:</div> <span class="wpgetapi-shortcode wpgetapi-copy">[wpgetapi_endpoint api_id='<?php echo esc_html( $field->args['api_id'] ); ?>' endpoint_id='<span class='endpoint_id'></span>' debug='false']</span> <?php echo $copy_shortcode_html; ?></div>
+		<div class="wrapper"><div><?php esc_html_e( 'Template Tag:', 'wpgetapi' ); ?></div> <span class="wpgetapi-template-tag wpgetapi-copy">wpgetapi_endpoint( '<?php echo esc_html( $field->args['api_id'] ); ?>', '<span class='endpoint_id'></span>', array( 'debug' => false ) );</span> <?php echo wp_kses_post( $copy_template_tag_html ); ?></div>
+		<div class="wrapper"><div><?php esc_html_e( 'Shortcode:', 'wpgetapi' ); ?></div> <span class="wpgetapi-shortcode wpgetapi-copy">[wpgetapi_endpoint api_id='<?php echo esc_html( $field->args['api_id'] ); ?>' endpoint_id='<span class='endpoint_id'></span>' debug='false']</span> <?php echo wp_kses_post( $copy_shortcode_html ); ?></div>
 	</pre>
 
 	<div class="wpgetapi-test-area" data-endpoint="<?php echo esc_attr( $field->value ); ?>" data-api="<?php echo esc_attr( $field->args['api_id'] ); ?>">
@@ -118,3 +118,31 @@ function wpgetapi_sanitize_unique_id( $value, $field_args, $field ) {
 	return $sanitized_value;
 }
 
+if ( ! function_exists( 'wpgetapi_set_api_last_response_code' ) ) {
+	/**
+	 * Save API response code in option.
+	 * This response code will use in the PRO plugin Action log function.
+	 *
+	 * @param  string $api_id        API ID.
+	 * @param  string $endpoint_id   Endpoint ID.
+	 * @param  int    $response_code API Response Code.
+	 * @return void
+	 */
+	function wpgetapi_set_api_last_response_code( $api_id, $endpoint_id, $response_code ) {
+		update_option( 'wpgetapi_' . $api_id . '_' . $endpoint_id . '_last_api_call_status', $response_code, false );
+	}
+}
+
+if ( ! function_exists( 'wpgetapi_get_api_last_response_status' ) ) {
+	/**
+	 * Get API last response code.
+	 *
+	 * @param  string $api_id      API ID.
+	 * @param  string $endpoint_id Endpoint ID.
+	 * @return int
+	 */
+	function wpgetapi_get_api_last_response_status( $api_id, $endpoint_id ) {
+		$response_code = get_option( 'wpgetapi_' . $api_id . '_' . $endpoint_id . '_last_api_call_status', true );
+		return $response_code;
+	}
+}

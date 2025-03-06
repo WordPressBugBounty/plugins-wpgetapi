@@ -11,6 +11,8 @@
  * @link     https://github.com/CMB2/CMB2
  */
 
+/* phpcs:ignoreFile */
+
 /**
  * Get the bootstrap! If using the plugin from wordpress.org, REMOVE THIS!
  */
@@ -67,7 +69,7 @@ function yourprefix_render_row_cb( $field_args, $field ) {
 	?>
 	<div class="custom-field-row <?php echo esc_attr( $classes ); ?>">
 		<p><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label></p>
-		<p><input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo $value; ?>"/></p>
+		<p><input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>"/></p>
 		<p class="description"><?php echo esc_html( $description ); ?></p>
 	</div>
 	<?php

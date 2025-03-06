@@ -114,8 +114,8 @@ function wpgetapi_endpoint_shortcode( $atts = array() ) {
 						id="<?php echo esc_attr( $a['button_id'] ); ?>"
 						data-api="<?php echo esc_attr( $a['api_id'] ); ?>"
 						data-endpoint="<?php echo esc_attr( $a['endpoint_id'] ); ?>"
-						data-args="<?php echo esc_attr( json_encode( $a['args'] ) ); ?>"
-						data-keys="<?php echo esc_attr( json_encode( $a['keys'] ) ); ?>"
+						data-args="<?php echo esc_attr( wp_json_encode( $a['args'] ) ); ?>"
+						data-keys="<?php echo esc_attr( wp_json_encode( $a['keys'] ) ); ?>"
 						data-post_id="<?php echo esc_attr( get_the_ID() ); ?>">
 						<span class="button_text"><?php echo esc_html( $button_text ); ?></span>
 					</button>

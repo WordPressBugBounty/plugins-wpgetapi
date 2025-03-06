@@ -52,8 +52,8 @@ class Wpgetapi_License_Handler {
 
 		add_submenu_page(
 			'wpgetapi_setup',
-			__( 'Plugin Licenses' ),
-			__( 'Licenses' ),
+			__( 'Plugin Licenses', 'wpgetapi' ),
+			__( 'Licenses', 'wpgetapi' ),
 			'manage_options',
 			WPGETAPILICENSEPAGE,
 			array( $this, 'license_page' )
@@ -72,7 +72,7 @@ class Wpgetapi_License_Handler {
 
 		?>
 		<div class="wrap">
-			<h2><?php esc_html_e( 'WPGetAPI Extension Licenses' ); ?></h2>
+			<h2><?php esc_html_e( 'WPGetAPI Extension Licenses', 'wpgetapi' ); ?></h2>
 			<form method="post" action="options.php">
 
 				<?php
@@ -112,12 +112,12 @@ class Wpgetapi_License_Handler {
 	 * This is a means of catching errors from the activation method above and displaying it to the customer
 	 */
 	public function admin_notices() {
-		if ( isset( $_GET['sl_activation'] ) && ! empty( $_GET['message'] ) ) {
+		if ( isset( $_GET['sl_activation'] ) && ! empty( $_GET['message'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- We are not processing form submission.
 
-			switch ( $_GET['sl_activation'] ) {
+			switch ( $_GET['sl_activation'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We are not processing form submission.
 
 				case 'false':
-					$message = urldecode( $_GET['message'] );
+					$message = urldecode( wp_unslash( $_GET['message'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- We are not processing form submission.
 					?>
 					<div class="error">
 						<p><?php echo wp_kses_post( $message ); ?></p>

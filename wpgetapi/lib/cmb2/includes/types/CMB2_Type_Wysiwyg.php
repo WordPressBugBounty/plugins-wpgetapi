@@ -13,6 +13,9 @@
  * @method string _id()
  * @method string _desc()
  */
+
+/* phpcs:ignoreFile */
+
 class CMB2_Type_Wysiwyg extends CMB2_Type_Textarea {
 
 	/**

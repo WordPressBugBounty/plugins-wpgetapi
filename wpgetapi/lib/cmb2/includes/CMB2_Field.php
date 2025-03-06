@@ -14,6 +14,9 @@
  * @method string type()
  * @method mixed fields()
  */
+
+/* phpcs:ignoreFile */
+
 class CMB2_Field extends CMB2_Base {
 
 	/**

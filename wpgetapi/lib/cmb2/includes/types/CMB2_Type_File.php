@@ -10,6 +10,9 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
+
+/* phpcs:ignoreFile */
+
 class CMB2_Type_File extends CMB2_Type_File_Base {
 
 	/**

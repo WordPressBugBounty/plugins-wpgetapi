@@ -11,6 +11,9 @@
  * @author    CMB2 team
  * @license   GPL-2.0+
  */
+
+/* phpcs:ignoreFile */
+
 class CMB2_Ajax {
 
 	// Whether to hijack the oembed cache system.

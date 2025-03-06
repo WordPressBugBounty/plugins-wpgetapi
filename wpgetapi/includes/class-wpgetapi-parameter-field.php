@@ -46,19 +46,22 @@ class WpGetApi_Parameter_Field extends CMB2_Type_Base {
 
 		<div class="name input-wrap">
 			<label for="<?php echo esc_attr( $this->_id( '_name' ) ); ?>">
-				<?php echo esc_html( $this->_text( 'parameter_name_text', __( 'Name', 'wpgetapi' ) ) ); ?>
+				<?php echo esc_html( $this->_text( 'parameter_name_text', esc_html__( 'Name', 'wpgetapi' ) ) ); ?>
 			</label>
 
 			<?php
-			echo $this->types->input(
-				array(
-					'name'        => $this->_name( '[name]' ),
-					'id'          => $this->_id( '_name' ),
-					'value'       => $value['name'],
-					'desc'        => '',
-					'placeholder' => __( 'Name of the parameter', 'wpgetapi' ),
-				)
+			$args = array(
+				'name'        => esc_attr( $this->_name( '[name]' ) ),
+				'id'          => esc_attr( $this->_id( '_name' ) ),
+				'value'       => esc_attr( $value['name'] ),
+				'desc'        => '',
+				'placeholder' => esc_html__( 'Name of the parameter', 'wpgetapi' ),
 			);
+			if ( $this->field->args( 'repeatable' ) ) {
+				$args['data-iterator'] = esc_attr( $this->types->iterator );
+			}
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Ignored since the data is printed input html content.
+			echo $this->types->input( $args );
 			?>
 		</div><span class="colon">:</span><div class="value input-wrap">
 			<label for="<?php echo esc_attr( $this->_id( '_value' ) ); ?>">
@@ -66,16 +69,19 @@ class WpGetApi_Parameter_Field extends CMB2_Type_Base {
 			</label>
 
 			<?php
-			echo $this->types->textarea(
-				array(
-					'name'        => $this->_name( '[value]' ),
-					'id'          => $this->_id( '_value' ),
-					'value'       => stripslashes( $value['value'] ),
-					'desc'        => '',
-					'rows'        => 1,
-					'placeholder' => __( 'Value of the parameter', 'wpgetapi' ),
-				)
+			$args = array(
+				'name'        => esc_attr( $this->_name( '[value]' ) ),
+				'id'          => esc_attr( $this->_id( '_value' ) ),
+				'value'       => esc_attr( wp_unslash( $value['value'] ) ),
+				'desc'        => '',
+				'rows'        => 1,
+				'placeholder' => esc_html__( 'Value of the parameter', 'wpgetapi' ),
 			);
+			if ( $this->field->args( 'repeatable' ) ) {
+				$args['data-iterator'] = esc_attr( $this->types->iterator );
+			}
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Ignored since the data is printed input html content.
+			echo $this->types->textarea( $args );
 			?>
 		</div>
 		
@@ -83,6 +89,20 @@ class WpGetApi_Parameter_Field extends CMB2_Type_Base {
 
 		// grab the data from the output buffer.
 		return $this->rendered( ob_get_clean() );
+	}
+
+	/**
+	 * Generate field id attribute
+	 * Copy and then tweak the CMB2_Types class's id() method from src/lib/cmb2/includes/CMB2Types.php
+	 *
+	 * @since  1.1.0
+	 * @param  string $suffix                     For multi-part fields
+	 * @param  bool   $append_repeatable_iterator Whether to append the iterator attribute if the field is repeatable.
+	 * @return string                             Id attribute
+	 */
+	private function _id( $suffix = '', $append_repeatable_iterator = true ) {
+		$id = $this->types->field->id() . $suffix . ( $this->types->field->args( 'repeatable' ) ? '_' . $this->types->iterator : '' );
+		return $id;
 	}
 
 

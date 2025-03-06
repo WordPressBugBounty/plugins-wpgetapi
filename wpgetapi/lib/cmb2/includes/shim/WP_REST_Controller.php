@@ -1,6 +1,6 @@
 <?php
 
-
+/* phpcs:ignoreFile */
 abstract class WP_REST_Controller {
 
 	/**

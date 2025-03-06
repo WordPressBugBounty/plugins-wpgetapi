@@ -1,10 +1,10 @@
 === WPGet API - Connect to any external REST API ===
 Contributors: wpgetapi, DavidAnderson, pmbaldha, DNutbourne, aporter, webulous
-Tags: api, external api, json, endpoint, rest, woocommerce
+Tags: api, external api, json, endpoint, rest
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.7
-Stable tag: 2.2.10
+Stable tag: 2.25.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,6 +188,15 @@ You can create custom posts from API data (sync API to custom posts) using our [
 
 
 == Changelog ==
+
+= 2.25.1 - 06/Mar/2025 =
+
+* FIX: After token refresh show the wrong response code in action logs.
+* FIX: The Hide/Show test Result button toggles all the endpoint test results rather than individual endpoints's test result.
+* REFACTOR: Make the WPGetAPI plugin compatible with the Plugin Checks (PCP) plugin - specific to the "Plugin Repo" check.
+* SECURITY: Sanitized the API call URLs before calling.
+* TWEAK: Prevent unsafe URL API calls when the WPGETAPI_REJECT_UNSAFE_URL constant is defined.
+* TWEAK: escaping translation strings.
 
 = 2.2.10 - 17/Dec/2024 =
 
@@ -530,4 +539,4 @@ You can create custom posts from API data (sync API to custom posts) using our [
 - Initial Release
 
 == Upgrade Notice ==
-* 2.2.10: A fix that includes test results of the previous endpoint when adding second and onward endpoints to the API. A recommended update for all.
+* 2.25.1: A security fix that sanitizes the URL before calling an API endpoint, various fixes, various refactoring, and tweaks.

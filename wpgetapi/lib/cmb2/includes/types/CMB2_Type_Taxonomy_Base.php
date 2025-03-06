@@ -10,6 +10,9 @@
  * @license   GPL-2.0+
  * @link      https://cmb2.io
  */
+
+/* phpcs:ignoreFile */
+
 abstract class CMB2_Type_Taxonomy_Base extends CMB2_Type_Multi_Base {
 
 	/**

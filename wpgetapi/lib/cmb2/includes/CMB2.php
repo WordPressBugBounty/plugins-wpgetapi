@@ -15,6 +15,8 @@
  * @property-read array $tax_metaboxes_to_remove
  */
 
+/* phpcs:ignoreFile */
+
 /**
  * The main CMB2 object for storing box data/properties.
  */
@@ -196,7 +198,7 @@ class CMB2 extends CMB2_Base {
 	public function __construct( $config, $object_id = 0 ) {
 
 		if ( empty( $config['id'] ) ) {
-			wp_die( esc_html__( 'Metabox configuration is required to have an ID parameter.', 'cmb2' ) );
+			wp_die( esc_html__( 'Metabox configuration is required to have an ID parameter.', 'wpgetapi' ) );
 		}
 
 		$this->cmb_id = $config['id'];
@@ -620,7 +622,7 @@ class CMB2 extends CMB2_Base {
 			$duplicate_button = isset( $_GET['page'] ) && $_GET['page'] == 'wpgetapi_setup' ? '' : '<button class="duplicate-endpoint-button button-primary">' . esc_html__( 'Duplicate', 'wpgetapi' ) . '</button>';
 				
 			echo '
-			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'cmb2' ), '"><br></div>
+			<div class="cmbhandle" title="' , esc_attr__( 'Click to toggle', 'wpgetapi' ), '"><br></div>
 			<h3 class="cmb-group-title cmbhandle-title"><span>', $group_title, '</span>' . $button . $duplicate_button . '</h3>
 
 			<div class="inside cmb-td cmb-nested cmb-field-list">';

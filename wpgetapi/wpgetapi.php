@@ -5,7 +5,7 @@
  * Description: Connect to external API's and display the API data.
  * Author: WPGetAPI
  * Author URI:  https://wpgetapi.com/
- * Version: 2.25.1
+ * Version: 2.25.2
  * Text Domain: wpgetapi
  * License: GPL2 or later
  *
@@ -29,7 +29,7 @@ final class WP_Get_API {
 	 */
 	protected static $_instance = null;
 
-	public $version = '2.25.1';
+	public $version = '2.25.2';
 
 	/**
 	 * Main Instance.
@@ -93,6 +93,9 @@ final class WP_Get_API {
 		$plugin_file = WPGETAPIBASENAME;
 		add_filter( "plugin_action_links_{$plugin_file}", array( $this, 'plugin_action_links' ), 10, 4 );
 		add_filter( 'plugin_row_meta', array( $this, 'filter_plugin_row_meta' ), 10, 4 );
+
+		// Load translations at the init time
+		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 	}
 
 	/**
@@ -152,6 +155,12 @@ final class WP_Get_API {
 		return $plugin_meta;
 	}
 
+	/**
+	 * Loading translations.
+	 */
+	public function load_textdomain() {
+		load_plugin_textdomain( 'wpgetapi', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
 
 	/**
 	 * Adds items to the plugin's action links on the Plugins listing screen.

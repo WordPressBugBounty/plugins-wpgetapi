@@ -46,7 +46,7 @@ if ( ! defined( 'WPGETAPIDIR' ) ) {
 	</p>
 	<p>
 		<?php
-			echo '<strong><a href="https://updraftplus.com" target="_blank">UpdraftPlus</a>: </strong>' . esc_html__( 'Back up your website with the world’s leading backup and migration plugin.', 'wpgetapi' ) . ' ' . esc_html__( 'Actively installed on more than 3 million WordPress websites.', 'wpgetapi' );
+			echo '<strong><a href="https://teamupdraft.com/updraftplus/" target="_blank">UpdraftPlus</a>: </strong>' . esc_html__( 'Back up your website with the world’s leading backup and migration plugin.', 'wpgetapi' ) . ' ' . esc_html__( 'Actively installed on more than 3 million WordPress websites.', 'wpgetapi' );
 		?>
 	</p>
 	<p>

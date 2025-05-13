@@ -36,12 +36,6 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 		protected $title = '';
 
 		/**
-		 * Options Page title
-		 * @var string
-		 */
-		protected $menu_title = '';
-
-		/**
 		 * Options Tab Pages
 		 * @var array
 		 */
@@ -71,11 +65,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 		 * Constructor
 		 * @since 0.1.0
 		 */
-		private function __construct() {
-			// Set our title
-			$this->menu_title = __( 'WPGetAPI', 'wpgetapi' );
-			$this->title      = __( 'WPGetAPI', 'wpgetapi' );
-		}
+		private function __construct() {}
 
 		/**
 		 * Returns the running object
@@ -500,6 +490,10 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 
 
 		public function add_options_pages() {
+			// Set our title
+			$menu_title  = __( 'WPGetAPI', 'wpgetapi' );
+			$this->title = __( 'WPGetAPI', 'wpgetapi' );
+
 			add_thickbox();
 
 			$option_tabs = self::option_fields();
@@ -509,16 +503,16 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 
 					$this->options_pages[] = add_menu_page(
 						$this->title,
-						$this->menu_title,
+						$menu_title,
 						'manage_options',
 						$option_tab['id'],
 						array( $this, 'admin_page_display' ),
 						'none'
 					); //Link admin menu to first tab
 
-					add_submenu_page( $option_tabs[0]['id'], $this->menu_title, $option_tab['menu_title'], 'manage_options', $option_tab['id'], array( $this, 'admin_page_display' ) ); //Duplicate menu link for first submenu page
+					add_submenu_page( $option_tabs[0]['id'], $menu_title, $option_tab['menu_title'], 'manage_options', $option_tab['id'], array( $this, 'admin_page_display' ) ); //Duplicate menu link for first submenu page
 				} else {
-					$this->options_pages[] = add_submenu_page( $option_tabs[0]['id'], $this->menu_title, $option_tab['menu_title'], 'manage_options', $option_tab['id'], array( $this, 'admin_page_display' ) );
+					$this->options_pages[] = add_submenu_page( $option_tabs[0]['id'], $menu_title, $option_tab['menu_title'], 'manage_options', $option_tab['id'], array( $this, 'admin_page_display' ) );
 				}
 			}
 

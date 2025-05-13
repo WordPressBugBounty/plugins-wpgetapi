@@ -3,8 +3,8 @@ Contributors: wpgetapi, DavidAnderson, pmbaldha, DNutbourne, aporter, webulous
 Tags: api, external api, json, endpoint, rest
 Requires at least: 5.0
 Requires PHP: 7.0
-Tested up to: 6.7
-Stable tag: 2.25.1
+Tested up to: 6.8
+Stable tag: 2.25.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,6 +188,12 @@ You can create custom posts from API data (sync API to custom posts) using our [
 
 
 == Changelog ==
+
+= 2.25.2 - 08/May/2025 =
+
+* FIX: Resolve incorrect call to the _load_textdomain_just_in_time function for WordPress 6.8.
+* FIX: When calling a URL with JSON in the query string, sanitize_url causes an issue.
+* TWEAK: Replace the updraftplus.com URL with teamupdraft.com.
 
 = 2.25.1 - 06/Mar/2025 =
 
@@ -539,4 +545,4 @@ You can create custom posts from API data (sync API to custom posts) using our [
 - Initial Release
 
 == Upgrade Notice ==
-* 2.25.1: A security fix that sanitizes the URL before calling an API endpoint, various fixes, various refactoring, and tweaks.
+* 2.25.2: Various fixes, and a tweak. A recommended update for all. A recommended update for all.

@@ -409,7 +409,7 @@ class WpGetApi_Api {
 		$response = apply_filters( 'wpgetapi_before_get_request', $response, $this );
 
 		if ( empty( $response ) ) {
-			$response = wp_remote_get( sanitize_url( $this->final_url ), $this->final_request_args );
+			$response = wp_remote_get( $this->final_url, $this->final_request_args );
 		}
 
 		return $response;
@@ -427,7 +427,7 @@ class WpGetApi_Api {
 		//$this->final_request_args['method'] = 'POST';
 
 		if ( empty( $response ) ) {
-			$response = wp_remote_post( sanitize_url( $this->final_url ), $this->final_request_args );
+			$response = wp_remote_post( $this->final_url, $this->final_request_args );
 		}
 
 		return $response;
@@ -438,7 +438,7 @@ class WpGetApi_Api {
 	 */
 	public function PUT_request() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- Ignore not snake case format because it's used in the other premium plugins.
 		$this->final_request_args['method'] = 'PUT';
-		$response                           = wp_remote_request( sanitize_url( $this->final_url ), $this->final_request_args );
+		$response                           = wp_remote_request( $this->final_url, $this->final_request_args );
 		return $response;
 	}
 
@@ -447,7 +447,7 @@ class WpGetApi_Api {
 	 */
 	public function PATCH_request() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- Ignore not snake case format because it's used in the premium plugins.
 		$this->final_request_args['method'] = 'PATCH';
-		$response                           = wp_remote_request( sanitize_url( $this->final_url ), $this->final_request_args );
+		$response                           = wp_remote_request( $this->final_url, $this->final_request_args );
 		return $response;
 	}
 
@@ -456,7 +456,7 @@ class WpGetApi_Api {
 	 */
 	public function DELETE_request() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- Ignore not snake case format because it's used in the premium plugins.
 		$this->final_request_args['method'] = 'DELETE';
-		$response                           = wp_remote_request( sanitize_url( $this->final_url ), $this->final_request_args );
+		$response                           = wp_remote_request( $this->final_url, $this->final_request_args );
 		return $response;
 	}
 
@@ -797,7 +797,7 @@ class WpGetApi_Api {
 					<div class="debug-item">
 						<h6><?php esc_html_e( 'Response', 'wpgetapi' ); ?></h6>
 						<p class="small"><?php esc_html_e( 'The full response from the API request.', 'wpgetapi' ); ?></p>
-						<div class="debug-result"><?php wpgetapi_pp( $this->response ); ?></div>
+						<div class="debug-result"><?php $this->render_api_response( $this->response, $status['title'], $status['desc'] ); ?></div>
 					</div>
 				
 				<?php } else { ?>
@@ -862,7 +862,7 @@ class WpGetApi_Api {
 				<div class="debug-item">
 					<h6><?php esc_html_e( 'Response', 'wpgetapi' ); ?></h6>
 					<p class="small"><?php esc_html_e( 'The full response from the API request.', 'wpgetapi' ); ?></p>
-					<div class="debug-result"><?php wpgetapi_pp( $this->response ); ?></div>
+					<div class="debug-result"><?php $this->render_api_response( $this->response, $status['title'], $status['desc'] ); ?></div>
 				</div>
 
 				<?php } ?>
@@ -877,6 +877,31 @@ class WpGetApi_Api {
 
 			return $data;
 
+		}
+	}
+
+	/**
+	 * The full response from the API request.
+	 *
+	 * @param object $response              Full response from the API request.
+	 * @param string $status_title          API request status title.
+	 * @param string $display_error_content If response content invalid data then display this text.
+	 */
+	private function render_api_response( $response, $status_title, $display_error_content ) {
+		/*
+		 * If the API response status is 'Bad Request', check if the body contains HTML.
+		 * This typically occurs when the API returns a 404 or other HTML error page.
+		 * Detecting HTML prevents raw markup from breaking the site's debug output.
+		 */
+		if ( 'Bad Request' === $status_title ) {
+			$body = wp_remote_retrieve_body( $response );
+			if ( preg_match( '/<\s*!DOCTYPE\s+html/i', $body ) || preg_match( '/<html[^>]*>/i', $body ) ) {
+				echo esc_html( $display_error_content );
+			} else {
+				wpgetapi_pp( $response );
+			}
+		} else {
+			wpgetapi_pp( $response );
 		}
 	}
 }

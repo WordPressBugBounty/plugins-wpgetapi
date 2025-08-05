@@ -53,6 +53,13 @@ class WpGetApi_Api {
 	public $oauth2 = false;
 
 	/**
+	 * API response headers.
+	 *
+	 * @var array|string Response headers from the API.
+	 */
+	public $response_header = '';
+
+	/**
 	 * Main constructor
 	 *
 	 * @since 1.0.0
@@ -246,6 +253,21 @@ class WpGetApi_Api {
 		// action to intercept call depending on response_code
 		$this->response = apply_filters( 'wpgetapi_before_retrieve_body', $this->response, $this->response_code, $this );
 
+		/**
+		 * Retrieves and filters the response headers from the API request.
+		 *
+		 * This sets the `$this->response_header` property using the headers from the API response.
+		 * Allows modification of the headers via the 'wpgetapi_response_headers' filter.
+		 *
+		 * @see https://developer.wordpress.org/reference/functions/wp_remote_retrieve_headers/
+		 *
+		 * @param array|Requests_Utility_CaseInsensitiveDictionary $headers       The headers retrieved from the response.
+		 * @param array|WP_Error                                   $response      The full response or WP_Error on failure.
+		 * @param int                                              $response_code The HTTP response code.
+		 * @param object                                           $this          The WpGetApi_Api instance.
+		 */
+		$this->response_header = apply_filters( 'wpgetapi_response_headers', wp_remote_retrieve_headers( $this->response ), $this->response, $this->response_code, $this );
+
 		// get body
 		// modified in version 1.6.1 to allow for OAuth 2.0 plugin returning body already
 		$data = isset( $this->response['body'] ) ? $this->response['body'] : $this->response;
@@ -294,10 +316,11 @@ class WpGetApi_Api {
 
 		// add empty array - was getting errors if it was just null or false
 		$params = empty( $params ) ? array( '' => '' ) : $params;
+		$params = array_map( 'rawurlencode', $params );
 
 		$result = add_query_arg( $params, $url );
 
-		return $result;
+		return rawurldecode( $result );
 	}
 
 

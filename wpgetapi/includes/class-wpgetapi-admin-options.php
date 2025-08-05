@@ -999,7 +999,8 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 					}, 1000);
 				});
 
-				$( '.wpgetapi-test-area .handle' ).on('click', function() {
+				$( '.wpgetapi-test-area .handle' ).on('click', function( e ) {
+					e.preventDefault();
 					$( this ).closest( '.cmb-repeatable-grouping' ).find( '.wpgetapi-result' ).toggle();
 				});
 

@@ -4,7 +4,7 @@ Tags: api, external api, json, endpoint, rest
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 2.25.2
+Stable tag: 2.25.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,6 +188,13 @@ You can create custom posts from API data (sync API to custom posts) using our [
 
 
 == Changelog ==
+
+= 2.25.3 - 01/Aug/2025 =
+
+* FIX: Fixed pagination not working in API to Posts when importing from an external WordPress REST API.
+* FIX: Issue in query parameter when '=' sign in last of the query parameter.
+* FIX: Webpage layout issues caused by HTML content in the API response body.
+* TWEAK: Enhance "Hide/Show Results" button visibility.
 
 = 2.25.2 - 08/May/2025 =
 
@@ -545,4 +552,4 @@ You can create custom posts from API data (sync API to custom posts) using our [
 - Initial Release
 
 == Upgrade Notice ==
-* 2.25.2: Various fixes, and a tweak. A recommended update for all. A recommended update for all.
+* 2.25.3: Various fixes and a UI improvement. A recommended update for all.

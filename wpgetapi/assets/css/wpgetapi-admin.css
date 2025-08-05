@@ -564,12 +564,12 @@ body[class*="wpgetapi_"] {
 	margin: 20px 0 20px;
 }
 .wrap.wpgetapi .wpgetapi-test-area .handle {
-	margin: 0;
-	border-bottom: 1px dotted #ddd;
-	padding: 0 0 2px;
-	cursor: pointer;
 	float: right;
+	margin-bottom: 4px;
 	font-size: 12px;
+	line-height: 2;
+	min-height: 24px;
+	background: #fff;
 }
 .wrap.wpgetapi .wpgetapi-test-area pre {
 	box-shadow: none;

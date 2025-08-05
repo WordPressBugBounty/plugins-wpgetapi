@@ -83,7 +83,7 @@ function wpgetapi_output_top_of_endpoint( $field_args, $field ) {
 
 	<div class="wpgetapi-test-area" data-endpoint="<?php echo esc_attr( $field->value ); ?>" data-api="<?php echo esc_attr( $field->args['api_id'] ); ?>">
 		
-		<span class="handle" style="display:none">Hide/Show Results</span>
+		<button type="button" class="handle button-primary" style="display:none">Hide/Show Results</button>
 
 		<?php do_action( 'wpgetapi_admin_before_test_result' ); ?>
 

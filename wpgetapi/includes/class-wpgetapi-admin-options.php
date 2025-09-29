@@ -103,6 +103,8 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 			add_action( 'all_admin_notices', array( $this, 'render_admin_notices' ) );
 
 			add_action( 'wp_ajax_wpgetapi_notice_dismiss', array( $this, 'wpgetapi_notice_dismiss_handler' ) );
+
+			add_action( 'cmb2_options-page_process_fields_wpgetapi_setup', array( $this, 'cleanup_wpgetapi_removed_api_options' ), 10, 2 );
 		}
 
 		/**
@@ -189,6 +191,9 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 						'show_names' => true,
 						'fields'     => $this->endpoint_fields( $type, $api_id, $base_url ),
 					);
+
+					// Hook to clean up data when API endpoints are removed.
+					add_action( 'cmb2_options-page_process_fields_wpgetapi_' . $api['id'], array( $this, 'cleanup_removed_api_endpoints' ), 10, 2 );
 
 				}
 			}
@@ -726,7 +731,7 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 				wp_die();
 			}
 
-			$new_data = json_decode( stripslashes( $textarea ), true );
+			$new_data = json_decode( $textarea, true );
 			if ( ! isset( $new_data['endpoints'] ) ) {
 				echo 'No endpoints found.';
 				wp_die();
@@ -1291,6 +1296,93 @@ if ( ! class_exists( 'WpGetApi_Admin_Options' ) ) :
 					'result' => true,
 				)
 			);
+		}
+
+		/**
+		 * Fires before fields have been processed/saved.
+		 *
+		 * Compares the existing API setup with the new one. If any APIs have been removed,
+		 * their associated endpoint options are deleted from the database.
+		 *
+		 * @link https://cmb2.io/api/source-class-CMB2.html#850
+		 *
+		 * @param array $cmb       The CMB2 object.
+		 * @param int   $object_id The ID of the current object.
+		 */
+		public function cleanup_wpgetapi_removed_api_options( $cmb, $object_id ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- $object_id is required by the action hook.
+			$new_setup = $cmb->data_to_save;
+			$old_setup = get_option( 'wpgetapi_setup' );
+
+			$old_api_ids = isset( $old_setup['apis'] ) ? array_column( $old_setup['apis'], 'id' ) : array();
+			$new_api_ids = isset( $new_setup['apis'] ) ? array_column( $new_setup['apis'], 'id' ) : array();
+
+			$removed_api_ids = array_diff( $old_api_ids, $new_api_ids );
+
+			if ( empty( $removed_api_ids ) ) {
+				return;
+			}
+
+			foreach ( $removed_api_ids as $removed_api_id ) {
+				/**
+				 * Fires before an API setup is removed from wpgetapi_setup.
+				 *
+				 * This action allows add-on plugins to clean up their own data or options
+				 * associated with the removed API or its endpoints, before the core plugin
+				 * deletes its related option.
+				 *
+				 * @param string $api_id The ID of the API that is being removed.
+				 */
+				do_action( 'wpgetapi_api_before_removed', $removed_api_id );
+
+				delete_option( 'wpgetapi_' . $removed_api_id );
+			}
+		}
+
+		/**
+		 * Fires before fields have been processed/saved.
+		 *
+		 * This compares the existing API endpoints with the newly saved ones.
+		 * If any endpoints have been removed, it fires a hook so that add-on
+		 * plugins can clean up their own data, before the core plugin
+		 * deletes its related options.
+		 *
+		 * @link https://cmb2.io/api//source-class-CMB2.html#850
+		 *
+		 * @param array $cmb       The CMB2 object.
+		 * @param int   $object_id The ID of the current CMB2 options object.
+		 * @return void
+		 */
+		public function cleanup_removed_api_endpoints( $cmb, $object_id ) {
+			$new_endpoints = isset( $cmb->data_to_save['endpoints'] ) ? $cmb->data_to_save['endpoints'] : array();
+			$api_id        = str_replace( 'wpgetapi_', '', $object_id );
+			$old_api_setup = get_option( $object_id );
+
+			if ( empty( $old_api_setup ) || ! isset( $old_api_setup['endpoints'] ) ) {
+				return;
+			}
+
+			$new_endpoint_ids = array_column( $new_endpoints, 'id' );
+			$old_endpoint_ids = array_column( $old_api_setup['endpoints'], 'id' );
+
+			$removed_endpoint_ids = array_diff( $old_endpoint_ids, $new_endpoint_ids );
+
+			if ( empty( $removed_endpoint_ids ) ) {
+				return;
+			}
+
+			foreach ( $removed_endpoint_ids as $removed_endpoint_id ) {
+				/**
+				 * Fires before an API endpoint is removed from an API setup.
+				 *
+				 * This allows add-on plugins to clean up their own data or options
+				 * associated with the removed endpoint, before the core plugin
+				 * deletes its related option.
+				 *
+				 * @param string $removed_endpoint_id The ID of the endpoint being removed.
+				 * @param string $api_id              The ID of the API the endpoint belonged to.
+				 */
+				do_action( 'wpgetapi_before_endpoint_removed', $removed_endpoint_id, $api_id );
+			}
 		}
 	}
 

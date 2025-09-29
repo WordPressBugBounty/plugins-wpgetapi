@@ -1,10 +1,10 @@
 === WPGet API - Connect to any external REST API ===
 Contributors: wpgetapi, DavidAnderson, pmbaldha, DNutbourne, aporter, webulous
 Tags: api, external api, json, endpoint, rest
-Requires at least: 5.0
-Requires PHP: 7.0
+Requires at least: 5.6
+Requires PHP: 7.2
 Tested up to: 6.8
-Stable tag: 2.25.3
+Stable tag: 2.25.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -188,6 +188,12 @@ You can create custom posts from API data (sync API to custom posts) using our [
 
 
 == Changelog ==
+
+= 2.25.4 - 22/Sep/2025 =
+
+* FIX: Resolved JSON body parsing issue on endpoint import.
+* TWEAK: Remove endpoints data when an API is deleted from the setup page.
+* TWEAK: Updated minimum requirements to PHP 7.2 and WordPress 5.6.
 
 = 2.25.3 - 01/Aug/2025 =
 
@@ -552,4 +558,4 @@ You can create custom posts from API data (sync API to custom posts) using our [
 - Initial Release
 
 == Upgrade Notice ==
-* 2.25.3: Various fixes and a UI improvement. A recommended update for all.
+* 2.25.4: Fixes JSON parsing issue on imports, cleans up endpoint data on API deletion, and updates minimum requirements. A recommended update for all.
